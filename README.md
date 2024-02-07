@@ -8,3 +8,14 @@
 
 
 a C# based Operating System made by **@nevixity_**
+
+[Cosmos](https://cosmosos.github.io/) made this possible!!
+
+Feature that will be available after v1.0 is released : 
+- Functional and customizeable GUI
+- File System (Stable)
+- Text Mode
+- Lua Port (From AuraOS)
+- ArcBash
+- Programs
+- etc.
