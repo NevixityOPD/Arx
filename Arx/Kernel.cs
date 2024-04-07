@@ -1,10 +1,14 @@
-﻿using Arx.Sys.Shell;
+﻿using Arx.Sys.GUI;
+using Arx.Sys.Shell;
 using Arx.Sys.User;
 using Cosmos.System.ExtendedASCII;
 using Cosmos.System.FileSystem;
 using Cosmos.System.FileSystem.VFS;
+using Cosmos.System.Graphics;
+using IL2CPU.API.Attribs;
 using System;
 using System.IO;
+using System.Text;
 using CosmosSys = Cosmos.System;
 
 namespace Arx
@@ -14,8 +18,12 @@ namespace Arx
         public static CosmosVFS FileSystem;
         public static ShellManager ShellManager;
         public static UserManager UserManager;
+        public static Desktop Desktop;
+
+        public static bool GUIMode = false;
 
         public static string currentDir = @"0:\";
+        public static uint totalRam = Cosmos.Core.CPU.GetAmountOfRAM();
 
         public static ConsoleColor normalBackground = ConsoleColor.Black;
         public static ConsoleColor normalForeground = ConsoleColor.White;
@@ -23,12 +31,22 @@ namespace Arx
         public static void SetForegroundNormal() => Console.ForegroundColor = normalForeground;
         public static void SetBackgroundNormal() => Console.BackgroundColor = normalBackground;
 
+        [ManifestResourceStream(ResourceName = "Arx.Assets.Font.Calibri.ttf")]
+        private static byte[] calibriByteData;
+
+        [ManifestResourceStream(ResourceName = "Arx.Assets.Bitmap.Cursor.bmp")]
+        private static byte[] cursorByte;
+        public static Bitmap cursorBitmap = new Bitmap(cursorByte);
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         protected override void BeforeRun()
         {
             Console.Clear();
             Console.SetWindowSize(90, 30);
+            Encoding.RegisterProvider(CosmosEncodingProvider.Instance);
             Console.OutputEncoding = CosmosEncodingProvider.Instance.GetEncoding(437);
+
+            CosmosTTF.TTFManager.RegisterFont("calibri", calibriByteData);
 
             FileSystem = new CosmosVFS();
             UserManager = new UserManager();
@@ -62,14 +80,19 @@ namespace Arx
             }
             else { Sys.Stdio.Write.Println("System directory found!", ConsoleColor.Green); }
 
-            UserManager.CreateUser(new User("Test", "1234", UserAccess.User));
-
             Sys.Stdio.Write.Print("Welcome to "); Sys.Stdio.Write.Println("Arx", ConsoleColor.Cyan);
         }
 
         protected override void Run()
         {
-            ShellManager.Call();
+            if(GUIMode)
+            {
+                Desktop.Render();
+            }
+            else
+            {
+                ShellManager.Call();
+            }
         }
     }
 }

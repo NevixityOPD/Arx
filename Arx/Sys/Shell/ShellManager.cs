@@ -18,12 +18,16 @@ namespace Arx.Sys.Shell
             new Commands.ShColor(),
             new Commands.ShPwd(),
             new Commands.ShLogin(),
+            new Commands.ShAsm(),
+            new Commands.ShUseradd(),
+            new Commands.ShUserrm(),
+            new Commands.ShGui(),
         };
 
         public void Call()
         {
             Stdio.Write.Print($"{Kernel.UserManager.user.userName}@{UserManager.UserAccessToString(Kernel.UserManager.user.userAccess)}", ConsoleColor.Cyan);  
-            Stdio.Write.Print("~:> ");
+            Stdio.Write.Print(" ~:> ");
             string commandln = Console.ReadLine();
 
             string[] commandlnSplit = commandln.Split(' ');

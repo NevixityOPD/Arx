@@ -25,10 +25,42 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Assets\Bitmap\Arrow_LR.bmp" />
+      <None Remove="Assets\Bitmap\Arrow_UD.bmp" />
+      <None Remove="Assets\Bitmap\Cursor.bmp" />
+      <None Remove="Assets\Bitmap\Type.bmp" />
+      <None Remove="Assets\Font\Calibri-B.ttf" />
+      <None Remove="Assets\Font\Calibri-BI.ttf" />
+      <None Remove="Assets\Font\Calibri-I.ttf" />
+      <None Remove="Assets\Font\Calibri-L.ttf" />
+      <None Remove="Assets\Font\Calibri-LI.ttf" />
+      <None Remove="Assets\Font\Calibri.ttf" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Assets\Bitmap\Arrow_LR.bmp" />
+      <EmbeddedResource Include="Assets\Bitmap\Arrow_UD.bmp" />
+      <EmbeddedResource Include="Assets\Bitmap\Cursor.bmp" />
+      <EmbeddedResource Include="Assets\Bitmap\Type.bmp" />
+      <EmbeddedResource Include="Assets\Font\Calibri-B.ttf" />
+      <EmbeddedResource Include="Assets\Font\Calibri-BI.ttf" />
+      <EmbeddedResource Include="Assets\Font\Calibri-I.ttf" />
+      <EmbeddedResource Include="Assets\Font\Calibri-L.ttf" />
+      <EmbeddedResource Include="Assets\Font\Calibri-LI.ttf" />
+      <EmbeddedResource Include="Assets\Font\Calibri.ttf" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Cosmos.Build" Version="0-*" NoWarn="NU1604" />
         <PackageReference Include="Cosmos.Debug.Kernel" Version="0-*" NoWarn="NU1604" />
         <PackageReference Include="Cosmos.System2" Version="0-*" NoWarn="NU1604" />
         <PackageReference Include="Cosmos.Plugs" Version="0-*" NoWarn="NU1604" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="CosmosTTF">
+        <HintPath>bin\Library\CosmosTTF.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

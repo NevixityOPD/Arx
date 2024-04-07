@@ -60,7 +60,7 @@ namespace Arx.Sys.User
                     });
 
                     if (Directory.Exists($@"0:\System\Users\{newUser.userName}")) { Write.Println("User created sucessfully!", ConsoleColor.Green); }
-                    else { Write.Println("Failed to create new user!", ConsoleColor.Red); }
+                    else { Write.Println("Unable to create new user!", ConsoleColor.Red); }
                 }
                 catch(Exception ex)
                 {
@@ -93,13 +93,57 @@ namespace Arx.Sys.User
                 }
                 else
                 {
-                    Write.Println("Failed to remove user!", ConsoleColor.Red);
+                    Write.Println("Unable to remove user!", ConsoleColor.Red);
                 }
 
             }
             catch (Exception ex)
             {
                 Write.Println("Exception: " + ex.ToString(), ConsoleColor.Red);
+            }
+        }
+
+        public void SetPassword(string username)
+        {
+            if(!Directory.Exists($@"0:\System\Users\{username}\"))
+            {
+                Stdio.Write.Println("User does not exist!", ConsoleColor.Red);
+            }
+            else
+            {
+                int remainingAttempt = 3;
+                ReDo:
+                string password = Read.Prompt("User Manager", ConsoleColor.Green, "Enter new password");
+                string passwordConfirmation = Read.Prompt("User Manager", ConsoleColor.Green, "Enter new password again");
+                if(passwordConfirmation == password)
+                {
+                    string[] userdata = File.ReadAllLines($@"0:\System\Users\{username}\user.dat");
+                    userdata[1] = password;
+                    File.WriteAllLines($@"0:\System\Users\{username}\user.dat", userdata);
+                    userdata = File.ReadAllLines($@"0:\System\Users\{username}\user.dat");
+                    if (userdata[1] == password)
+                    {
+                        Write.Println("Password changed", ConsoleColor.Green);
+                    }
+                    else
+                    {
+                        Write.Println("Password didn't changed", ConsoleColor.Red);
+                    }
+                }
+                else
+                {
+                    remainingAttempt--;
+                    if(remainingAttempt == 0)
+                    {
+                        Write.Println("Failed to change password!", ConsoleColor.Red);
+                        return;
+                    }
+                    else
+                    {
+                        Write.Println("Password doesn't matched!", ConsoleColor.Red);
+                        goto ReDo;
+                    }
+                }
             }
         }
 
@@ -122,14 +166,21 @@ namespace Arx.Sys.User
                         return;
                     }
 
-                    string password = Read.Prompt("Login", ConsoleColor.Green, "Password");
-                    if(password == userdata[1])
+                    if (!string.IsNullOrEmpty(userdata[1]))
                     {
-                        user = new User(userdata[0], userdata[1], StringToUserAccess(userdata[2]));
+                        string password = Read.Prompt("Login", ConsoleColor.Green, "Password");
+                        if (password == userdata[1])
+                        {
+                            user = new User(userdata[0], userdata[1], StringToUserAccess(userdata[2]));
+                        }
+                        else
+                        {
+                            Write.Println("Wrong password!", ConsoleColor.Red);
+                        }
                     }
                     else
                     {
-                        Write.Println("Wrong password!", ConsoleColor.Red);
+                        user = new User(userdata[0], userdata[1], StringToUserAccess(userdata[2]));
                     }
                 }
                 catch (Exception ex)

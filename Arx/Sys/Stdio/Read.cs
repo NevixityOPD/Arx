@@ -9,7 +9,6 @@ namespace Arx.Sys.Stdio
             Write.Print($"[{title}] ", titleColor);
             Write.Print(promptQuestion + "?: ");
             string answer = Console.ReadLine();
-            Write.Println("");
             return answer;
         }
 

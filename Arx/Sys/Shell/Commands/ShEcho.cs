@@ -65,10 +65,13 @@ namespace Arx.Sys.Shell.Commands
                                 }
                                 else if (key.Key == ConsoleKey.Backspace)
                                 {
-                                    textLine[currentLine].Length--;
-                                    Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
-                                    Stdio.Write.Print(" ");
-                                    Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+                                    if (textLine[currentLine].Length != 0)
+                                    {
+                                        textLine[currentLine].Length--;
+                                        Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+                                        Stdio.Write.Print(" ");
+                                        Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+                                    }
                                 }
                                 else
                                 {
@@ -136,7 +139,7 @@ namespace Arx.Sys.Shell.Commands
                 StringBuilder echoText = new StringBuilder();
                 for (int i = 0; i < args.Length; i++)
                 {
-                    echoText.Append(args[i]);
+                    echoText.Append(args[i] + " ");
                 }
                 Stdio.Write.Println(echoText.ToString());
             }
