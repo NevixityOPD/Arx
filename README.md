@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="280" height="263" src="https://github.com/NevixityOPD/Arx/blob/master/ArxLogoNew.png">
+  <img width="280" height="263" src="https://github.com/NevixityOPD/Arx/blob/main/ArxLogoNew.png">
 </p>
 
 <div align="center">
