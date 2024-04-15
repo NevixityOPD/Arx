@@ -8,6 +8,8 @@ namespace Arx.Sys.GUI.Controls
 {
     public class TextBox : Control
     {
+        //Test
+
         public TextBox(uint X, uint Y, ushort Width, Action EnterKeyEvent)
         {
             this.X = X;
