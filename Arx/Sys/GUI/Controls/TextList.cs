@@ -29,7 +29,8 @@ namespace Arx.Sys.GUI.Controls
         {
             for(int i = 0; i < args.Length; i++)
             {
-                Kernel.Desktop.Screen.DrawStringTTF(TextColor, args[i], "calibri", FontSize, new Point((int)X, (int)(Y + 16) + (TextSpacing * i)));
+                //Kernel.Desktop.Screen.DrawStringTTF(TextColor, args[i], "calibri", FontSize, new Point((int)X, (int)(Y + 16) + (TextSpacing * i)));
+                Kernel.Desktop.Screen.DrawString(args[i], Cosmos.System.Graphics.Fonts.PCScreenFont.Default, Color.Black, (int)X, (int)(Y + 16) + (TextSpacing * i));
             }
         }
     }

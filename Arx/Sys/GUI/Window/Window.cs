@@ -1,4 +1,6 @@
-﻿using Cosmos.System;
+﻿using Arx.Sys.GUI.Controls;
+using Cosmos.System;
+using CosmosTTF;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,6 +16,8 @@ namespace Arx.Sys.GUI.Window
             this.Width = Width;
             this.Height = Height;
             this.WindowTitle = WindowTitle;
+
+            exitButton = new Button(X + Width - 25, Y, 25, 25, "X", Color.Red, () => { IsVisible = false; });
         }
 
         public uint X { get; set; } = 25;
@@ -32,13 +36,17 @@ namespace Arx.Sys.GUI.Window
         private bool IsDragging = false;
         private int DragStartX;
         private int DragStartY;
+        private Button exitButton;
 
         public void Render()
         {
             Kernel.Desktop.Screen.DrawFilledRectangle(Color.FromArgb(17, 18, 17), (int)(X + 4), (int)(Y + 4), (int)Width, (int)Height);
             Kernel.Desktop.Screen.DrawFilledRectangle(BackgroundColor, (int)(X), (int)(Y), (int)Width, (int)Height);
             Kernel.Desktop.Screen.DrawFilledRectangle(TitleBarColor, (int)X, (int)Y, Width, TitleBarHeight);
-
+            //Kernel.Desktop.Screen.DrawStringTTF(Color.Black, WindowTitle, "calibri", 16, new Point((int)X + 17, (int)Y + 17));
+            Kernel.Desktop.Screen.DrawString(WindowTitle, Cosmos.System.Graphics.Fonts.PCScreenFont.Default, Color.Black, (int)X + 8, (int)Y + 8);
+            
+            exitButton.Render(new string[1]);
             if(Kernel.Desktop.mouse.GetCurrentMouseStat() == MouseState.Left && Kernel.Desktop.mouse.GetLastClickEvent() == MouseState.None && IsMouseWithin((int)X, (int)Y, Width, TitleBarHeight))
             {
                 DragStartX = (int)(MouseManager.X - X);
@@ -53,6 +61,9 @@ namespace Arx.Sys.GUI.Window
             {
                 X = (uint)(MouseManager.X - DragStartX);
                 Y = (uint)(MouseManager.Y - DragStartY);
+
+                exitButton.X = X + Width - 25;
+                exitButton.Y = Y;
             }
         }
 

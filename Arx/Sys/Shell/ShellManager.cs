@@ -33,8 +33,8 @@ namespace Arx.Sys.Shell
             string[] commandlnSplit = commandln.Split(' ');
             List<string> args = new List<string>();
 
-            foreach (var i in commandlnSplit) 
-            { if(i != commandlnSplit[0]) { args.Add(i); } }
+            for(int i = 0; i < commandlnSplit.Length; i++)
+            { if(i != 0) { args.Add(commandlnSplit[i]); } }
             foreach (var i in commands) 
             { if(commandlnSplit[0] == i.shellName) { i.Execute(args.ToArray()); } }
         }

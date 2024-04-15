@@ -1,15 +1,11 @@
 ﻿using Cosmos.System;
 using Cosmos.System.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
 
 namespace Arx.Sys.GUI
 {
     public class Mouse
     {
-        public Bitmap cursor { get; }
+        public Bitmap cursor { get; private set; }
 
         public Mouse(Bitmap cursor, uint screenWidth, uint screenHeight) 
         {
@@ -22,6 +18,11 @@ namespace Arx.Sys.GUI
         public void Render()
         {
             Kernel.Desktop.Screen.DrawImageAlpha(cursor, (int)MouseManager.X, (int)MouseManager.Y);
+        }
+
+        public void ChangeCursor(Bitmap cursor)
+        {
+            this.cursor = cursor;
         }
 
         public MouseState GetLastClickEvent()

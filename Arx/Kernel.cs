@@ -1,10 +1,12 @@
 ﻿using Arx.Sys.GUI;
 using Arx.Sys.Shell;
+using Arx.Sys.Stdio;
 using Arx.Sys.User;
 using Cosmos.System.ExtendedASCII;
 using Cosmos.System.FileSystem;
 using Cosmos.System.FileSystem.VFS;
 using Cosmos.System.Graphics;
+using Cosmos.System.Graphics.Fonts;
 using IL2CPU.API.Attribs;
 using System;
 using System.IO;
@@ -34,9 +36,15 @@ namespace Arx
         [ManifestResourceStream(ResourceName = "Arx.Assets.Font.Calibri.ttf")]
         private static byte[] calibriByteData;
 
-        [ManifestResourceStream(ResourceName = "Arx.Assets.Bitmap.Cursor.bmp")]
+        [ManifestResourceStream(ResourceName = "Arx.Assets.Bitmap.Cursor.Cursor.bmp")]
         private static byte[] cursorByte;
         public static Bitmap cursorBitmap = new Bitmap(cursorByte);
+
+        [ManifestResourceStream(ResourceName = "Arx.Assets.Bitmap.Cursor.Type.bmp")]
+        private static byte[] typeCursorByte;
+        public static Bitmap typeCursorBitmap = new Bitmap(typeCursorByte);
+
+        public static PCScreenFont font = Cosmos.System.Graphics.Fonts.PCScreenFont.Default;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         protected override void BeforeRun()
@@ -87,7 +95,17 @@ namespace Arx
         {
             if(GUIMode)
             {
-                Desktop.Render();
+                try
+                {
+                    Desktop.Render();
+                }
+                catch(Exception ex)
+                {
+                    GUIMode = false;
+                    Desktop.Screen.Disable();
+
+                    Write.Println($"Unexpected exception occured while GUI is running!. {ex.ToString()}", ConsoleColor.Red);
+                }
             }
             else
             {

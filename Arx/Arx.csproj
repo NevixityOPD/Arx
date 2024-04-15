@@ -27,7 +27,6 @@
     <ItemGroup>
       <None Remove="Assets\Bitmap\Arrow_LR.bmp" />
       <None Remove="Assets\Bitmap\Arrow_UD.bmp" />
-      <None Remove="Assets\Bitmap\Cursor.bmp" />
       <None Remove="Assets\Bitmap\Type.bmp" />
       <None Remove="Assets\Font\Calibri-B.ttf" />
       <None Remove="Assets\Font\Calibri-BI.ttf" />
@@ -38,10 +37,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="Assets\Bitmap\Arrow_LR.bmp" />
-      <EmbeddedResource Include="Assets\Bitmap\Arrow_UD.bmp" />
-      <EmbeddedResource Include="Assets\Bitmap\Cursor.bmp" />
-      <EmbeddedResource Include="Assets\Bitmap\Type.bmp" />
+      <EmbeddedResource Include="Assets\Bitmap\Cursor\Arrow_LR.bmp" />
+      <EmbeddedResource Include="Assets\Bitmap\Cursor\Arrow_UD.bmp" />
+      <EmbeddedResource Include="Assets\Bitmap\Cursor\Cursor.bmp" />
+      <EmbeddedResource Include="Assets\Bitmap\Cursor\Type.bmp" />
       <EmbeddedResource Include="Assets\Font\Calibri-B.ttf" />
       <EmbeddedResource Include="Assets\Font\Calibri-BI.ttf" />
       <EmbeddedResource Include="Assets\Font\Calibri-I.ttf" />
