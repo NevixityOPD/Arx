@@ -1,8 +1,6 @@
 ﻿using Cosmos.System;
-using CosmosTTF;
 using System;
 using System.Drawing;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Arx.Sys.GUI.Controls
 {
@@ -17,12 +15,17 @@ namespace Arx.Sys.GUI.Controls
             this.ButtonText = ButtonText;
             this.ButtonPressedEvent = ButtonPressedEvent;
             this.ButtonColor = ButtonColor;
+
+            StaticX = X;
+            StaticY = Y;
         }
 
         public override uint X { get; set; }
         public override uint Y { get; set; }
-        public ushort Width { get; set; }
-        public ushort Height { get; set; }
+        public override uint StaticX { get; set; }
+        public override uint StaticY { get; set; }
+        public override ushort Width { get; set; }
+        public override ushort Height { get; set; }
 
         public string ButtonText { get; set; }
 
@@ -34,12 +37,12 @@ namespace Arx.Sys.GUI.Controls
 
         public bool IsClicked = false;
 
-        public override void Render(string[] args)
+        public override void Render()
         {
             if(ShowShadow) { Kernel.Desktop.Screen.DrawFilledRectangle(Color.FromArgb(17, 18, 17), (int)X + 4, (int)Y + 4, Width, Height); }
             Kernel.Desktop.Screen.DrawFilledRectangle(ButtonColor, (int)X, (int)Y, Width, Height);
 
-            if(!string.IsNullOrEmpty(ButtonText))
+            if (!string.IsNullOrEmpty(ButtonText))
             {
                 int textX;
                 int textY = (Height / 2 - Kernel.font.Height / 2);
@@ -50,7 +53,15 @@ namespace Arx.Sys.GUI.Controls
                 Kernel.Desktop.Screen.DrawString(ButtonText, Cosmos.System.Graphics.Fonts.PCScreenFont.Default, Color.Black, (int)(textX + X), (int)(textY + Y));
             }
 
-            if(MouseManager.MouseState == MouseState.Left && MouseManager.LastMouseState == MouseState.None && IsMouseWithin((int)X, (int)Y, Width, Height))
+            if (IsMouseWithin((int)X, (int)Y, Width, Height))
+            {
+                if (Kernel.Desktop.mouse.cursor != Kernel.pointCursorBitmap)
+                {
+                    Kernel.Desktop.mouse.ChangeCursor(Kernel.pointCursorBitmap);
+                }
+            }
+
+            if (MouseManager.MouseState == MouseState.Left && MouseManager.LastMouseState == MouseState.None && IsMouseWithin((int)X, (int)Y, Width, Height))
             {
                 IsClicked = true;
             }

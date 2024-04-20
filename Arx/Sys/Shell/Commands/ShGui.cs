@@ -21,6 +21,11 @@ namespace Arx.Sys.Shell.Commands
                     Kernel.Desktop = new GUI.Desktop(true);
                     Kernel.GUIMode = true;
                 }
+                else
+                {
+                    Kernel.Desktop = new GUI.Desktop(false);
+                    Kernel.GUIMode = true;
+                }
             }
         }
     }

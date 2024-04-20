@@ -7,9 +7,14 @@ namespace Arx.Sys.GUI
     {
         public abstract uint X { get; set; }
         public abstract uint Y { get; set; }
+        public abstract ushort Width { get; set; }
+        public abstract ushort Height { get; set; }
+
+        public abstract uint StaticX { get; set; }
+        public abstract uint StaticY { get; set; }
 
         public abstract bool IsVisible { get; set; }
 
-        public abstract void Render(string[] args);
+        public abstract void Render();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Arx.Sys.User;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Arx.Sys.Shell
 {
@@ -22,6 +23,7 @@ namespace Arx.Sys.Shell
             new Commands.ShUseradd(),
             new Commands.ShUserrm(),
             new Commands.ShGui(),
+            new Commands.ShHelp(),
         };
 
         public void Call()
@@ -37,6 +39,26 @@ namespace Arx.Sys.Shell
             { if(i != 0) { args.Add(commandlnSplit[i]); } }
             foreach (var i in commands) 
             { if(commandlnSplit[0] == i.shellName) { i.Execute(args.ToArray()); } }
+
+            if (File.Exists(@"0:\System\Log\command.log"))
+            {
+                using (StreamWriter write = new StreamWriter(@"0:\System\Log\command.log"))
+                {
+                    write.AutoFlush = true;
+                    write.WriteLine(commandln);
+                    write.Close();
+                }
+            }
+            else
+            {
+                File.Create(@"0:\System\Log\command.log");
+                using (StreamWriter write = new StreamWriter(@"0:\System\Log\command.log"))
+                {
+                    write.AutoFlush = true;
+                    write.WriteLine(commandln);
+                    write.Close();
+                }
+            }
         }
     }
 }

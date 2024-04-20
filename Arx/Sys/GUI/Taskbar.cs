@@ -26,7 +26,7 @@ namespace Arx.Sys.GUI
         {
             Kernel.Desktop.Screen.DrawFilledRectangle(TaskbarColor, 0, Desktop.Height - 30, Desktop.Width, 30);
             Kernel.Desktop.Screen.DrawFilledRectangle(Color.White, 82, (Desktop.Height - 30) - 10, 10, 20);
-            MenuButton.Render(new string[1]);
+            MenuButton.Render();
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using Arx.Sys.GUI.Controls;
 using Cosmos.System;
-using CosmosTTF;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -17,7 +15,8 @@ namespace Arx.Sys.GUI.Window
             this.Height = Height;
             this.WindowTitle = WindowTitle;
 
-            exitButton = new Button(X + Width - 25, Y, 25, 25, "X", Color.Red, () => { IsVisible = false; });
+            WindowControls = new List<Control>();
+            exitButton = new Button(X + Width - 25, Y, 25, 25, "X", Color.Red, () => { IsRemoved = true; });
         }
 
         public uint X { get; set; } = 25;
@@ -29,9 +28,11 @@ namespace Arx.Sys.GUI.Window
         public const byte TitleBarHeight = 25;
 
         public bool IsVisible = true;
-        public bool TaskBarVisible = true;
+        public bool IsRemoved = false;
+        public bool TitlebarVisible = true;
         public Color BackgroundColor = Color.White;
         public Color TitleBarColor = Color.SkyBlue;
+        public List<Control> WindowControls;
 
         private bool IsDragging = false;
         private int DragStartX;
@@ -40,14 +41,28 @@ namespace Arx.Sys.GUI.Window
 
         public void Render()
         {
-            Kernel.Desktop.Screen.DrawFilledRectangle(Color.FromArgb(17, 18, 17), (int)(X + 4), (int)(Y + 4), (int)Width, (int)Height);
-            Kernel.Desktop.Screen.DrawFilledRectangle(BackgroundColor, (int)(X), (int)(Y), (int)Width, (int)Height);
+            Kernel.Desktop.Screen.DrawFilledRectangle(Color.FromArgb(17, 18, 17), (int)(X + 4), (int)(Y + 4), Width, Height);
+            Kernel.Desktop.Screen.DrawFilledRectangle(BackgroundColor, (int)X, (int)Y, Width, Height);
             Kernel.Desktop.Screen.DrawFilledRectangle(TitleBarColor, (int)X, (int)Y, Width, TitleBarHeight);
             //Kernel.Desktop.Screen.DrawStringTTF(Color.Black, WindowTitle, "calibri", 16, new Point((int)X + 17, (int)Y + 17));
-            Kernel.Desktop.Screen.DrawString(WindowTitle, Cosmos.System.Graphics.Fonts.PCScreenFont.Default, Color.Black, (int)X + 8, (int)Y + 8);
-            
-            exitButton.Render(new string[1]);
-            if(Kernel.Desktop.mouse.GetCurrentMouseStat() == MouseState.Left && Kernel.Desktop.mouse.GetLastClickEvent() == MouseState.None && IsMouseWithin((int)X, (int)Y, Width, TitleBarHeight))
+            Kernel.Desktop.Screen.DrawString(WindowTitle, Cosmos.System.Graphics.Fonts.PCScreenFont.Default, Color.Black, (int)X + 8, (int)Y + 10);
+            exitButton.Render();
+
+            if(X + Width >= Desktop.Width - 1) { IsDragging = false; X--; ; }
+            if(X <= 1) { IsDragging = false; X++; }
+
+            if(Y + Height >= Desktop.Height - 1) { IsDragging = false; Y--; }
+            if(Y <= 1) { IsDragging = false; Y++; }
+
+            foreach (var i in WindowControls)
+            {
+                i.X = i.StaticX + X;
+                i.Y = (Y + TitleBarHeight) + i.StaticY;
+
+                i.Render();
+            }
+
+            if (Kernel.Desktop.mouse.GetCurrentMouseStat() == MouseState.Left && Kernel.Desktop.mouse.GetLastClickEvent() == MouseState.None && IsMouseWithin((int)X, (int)Y, Width, TitleBarHeight))
             {
                 DragStartX = (int)(MouseManager.X - X);
                 DragStartY = (int)(MouseManager.Y - Y);

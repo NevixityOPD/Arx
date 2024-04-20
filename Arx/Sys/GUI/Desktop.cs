@@ -20,9 +20,6 @@ namespace Arx.Sys.GUI
         public Taskbar taskbar;
 
         public Color desktopBackground;
-        public TextList DebuStat;
-
-        public TextBox testBox;
 
         public List<Window.Window> windows;
 
@@ -42,13 +39,10 @@ namespace Arx.Sys.GUI
             Screen = FullScreenCanvas.GetFullScreenCanvas(new Mode(Width, Height, ColorDepth.ColorDepth32));
 
             windows = new List<Window.Window>();
-            DebuStat = new TextList(25, 25, Color.Black , 14, 16);
             mouse = new Mouse(Kernel.cursorBitmap, Width, Height);
 
-            testBox = new TextBox(100, 200, 200, null!);
-
             windows.Add(new Window.Window(25, 25, 300, 300, "Balls"));
-
+            
             taskbar = new Taskbar(Color.Gray);
         }
 
@@ -56,31 +50,30 @@ namespace Arx.Sys.GUI
         {
             Screen.Clear(desktopBackground);
 
-            taskbar.Render();
-
             if (EnableDebugStat)
             {
-                //Screen.DrawString($"FPS : {FPS}", Cosmos.System.Graphics.Fonts.PCScreenFont.Default, Color.Black, 25, 25);
-                DebuStat.Render(new string[]
-                {
-                    $"FPS : {FPS}",
-                    $"GUI Runtime : {Runtime}s",
-                    $"Ram total : {Kernel.totalRam} MB",
-                    $"Text render start : {testBox.TextStart}"
-                });
+                Screen.DrawString($"FPS : {FPS}", Cosmos.System.Graphics.Fonts.PCScreenFont.Default, Color.Black, 25, 25);
             }
 
-            testBox.Render(new string[1]);
-
-            foreach(var i in windows)
+            if(windows.Count != 0)
             {
-                if(i.IsVisible)
+                foreach (var i in windows)
                 {
-                    i.Render();
+                    if (i.IsVisible)
+                    {
+                        if (i.IsRemoved)
+                        {
+                            windows.Remove(i);
+                        }
+                        else { i.Render(); }
+                    }
                 }
             }
 
+            taskbar.Render();
+
             mouse.Render();
+            mouse.ChangeCursor(Kernel.cursorBitmap);
 
             Screen.Display();
             FrameRendered++;

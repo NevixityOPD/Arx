@@ -44,7 +44,11 @@ namespace Arx
         private static byte[] typeCursorByte;
         public static Bitmap typeCursorBitmap = new Bitmap(typeCursorByte);
 
-        public static PCScreenFont font = Cosmos.System.Graphics.Fonts.PCScreenFont.Default;
+        [ManifestResourceStream(ResourceName = "Arx.Assets.Bitmap.Cursor.Point.bmp")]
+        private static byte[] pointCursorByte;
+        public static Bitmap pointCursorBitmap = new Bitmap(pointCursorByte);
+
+        public static PCScreenFont font = PCScreenFont.Default;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         protected override void BeforeRun()
