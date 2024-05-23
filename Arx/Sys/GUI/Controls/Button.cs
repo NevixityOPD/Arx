@@ -70,9 +70,10 @@ namespace Arx.Sys.GUI.Controls
             {
                 IsClicked = false;
             }
-            
-            if(IsClicked)
+
+            if (IsClicked)
             {
+                IsClicked = false;
                 ButtonPressedEvent();
             }
         }

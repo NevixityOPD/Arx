@@ -6,9 +6,25 @@ namespace Arx.Sys.User
 {
     public class UserManager
     {
-        public User user = new User("Guest", "", UserAccess.Guest);
+        public UserManager()
+        {
+            user = new User("Guest", "", UserAccess.Guest);
+        }
 
-        public static string UserAccessToString(UserAccess userAccess)
+        public User user;
+
+        public void SetUserAsGuest() { user = new User("Guest", "", UserAccess.Guest); }
+
+        public bool CheckUserExistance(string username)
+        {
+            if(Directory.Exists($@"0:\System\Users\{username}"))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public string UserAccessToString(UserAccess userAccess)
         {
             switch(userAccess)
             {
@@ -25,7 +41,7 @@ namespace Arx.Sys.User
             return string.Empty;
         }
 
-        public static UserAccess StringToUserAccess(string userAccess)
+        public UserAccess StringToUserAccess(string userAccess)
         {
             switch (userAccess)
             {

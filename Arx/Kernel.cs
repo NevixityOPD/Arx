@@ -65,34 +65,43 @@ namespace Arx
             VFSManager.RegisterVFS(FileSystem);
             ShellManager = new ShellManager();
 
-            Sys.Stdio.Write.Println("Finding disk and partition");
+            Write.Println("Finding disk and partition");
 
-            if (FileSystem.Disks.Count > 0) { Sys.Stdio.Write.Println("Disk found!", ConsoleColor.Green); }
+            if (FileSystem.Disks.Count > 0) { Write.Println("Disk found!", ConsoleColor.Green); }
 
             for(int i = 0; i < FileSystem.Disks.Count; i++)
             {
-                Sys.Stdio.Write.Println($"Disk {i} => {FileSystem.Disks[i].Size} Bytes");
+                Write.Println($"Disk {i} => {FileSystem.Disks[i].Size} Bytes");
                 for(int e = 0; e < FileSystem.Disks[i].Partitions.Count; e++)
                 {
-                    Sys.Stdio.Write.Println($"\tPartition {e} => {FileSystem.Disks[i].Partitions[e].RootPath}");
+                    Write.Println($"\tPartition {e} => {FileSystem.Disks[i].Partitions[e].RootPath}");
                 }
             }
 
             ReCheck:
-            Sys.Stdio.Write.Println("Running check on system directory");
+            Write.Println("Running check on system directory");
             if(!Directory.Exists(@"0:\System\"))
             {
-                Sys.Stdio.Write.Println("System directory hasn't been made", ConsoleColor.Red);
+                Write.Println("Missing system directory", ConsoleColor.Red);
+
+                Write.Println("Creating missing system directory", ConsoleColor.Green);
                 Directory.CreateDirectory(@"0:\System\");
 
                 Directory.CreateDirectory(@"0:\System\Users");
-                Directory.CreateDirectory(@"0:\System\Log");
-                Directory.CreateDirectory(@"0:\System\Registry");
+                Directory.CreateDirectory(@"0:\System\Logs");
+                Directory.CreateDirectory(@"0:\System\Variables");
+                if (!UserManager.CheckUserExistance("root"))
+                {
+                    string password;
+                    Write.Println("Root user was missing!");
+                    password = Read.Prompt("Setup", ConsoleColor.Green, "Enter root password (Optional)");
+                    UserManager.CreateUser(new User("root", password, UserAccess.Root));
+                }
                 goto ReCheck;
             }
-            else { Sys.Stdio.Write.Println("System directory found!", ConsoleColor.Green); }
+            else { Write.Println("System directory found!", ConsoleColor.Green); }
 
-            Sys.Stdio.Write.Print("Welcome to "); Sys.Stdio.Write.Println("Arx", ConsoleColor.Cyan);
+            Write.Print("Welcome to "); Write.Println("Arx", ConsoleColor.Cyan);
         }
 
         protected override void Run()
@@ -108,7 +117,7 @@ namespace Arx
                     GUIMode = false;
                     Desktop.Screen.Disable();
 
-                    Write.Println($"Unexpected exception occured while GUI is running!. {ex.ToString()}", ConsoleColor.Red);
+                    Write.Println($"Unexpected exception occured while Graphic user interface is running!. {ex.ToString()}", ConsoleColor.Red);
                 }
             }
             else

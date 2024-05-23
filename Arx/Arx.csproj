@@ -22,6 +22,8 @@
         <ExtractMapFile>True</ExtractMapFile>
         <BinFormat>Bin</BinFormat>
         <CompressionType>Gzip</CompressionType>
+        <CompileVBEMultiboot>False</CompileVBEMultiboot>
+        <VBEResolution>800x600x32</VBEResolution>
     </PropertyGroup>
 
     <ItemGroup>

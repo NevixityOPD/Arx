@@ -1,5 +1,4 @@
-﻿using Arx.Sys.GUI.Controls;
-using Cosmos.Core.Memory;
+﻿using Cosmos.Core.Memory;
 using Cosmos.System.Graphics;
 using System.Collections.Generic;
 using System.Drawing;
@@ -17,7 +16,6 @@ namespace Arx.Sys.GUI
         public int FPS = 0;
         public int FrameRendered = 0;
         public int Runtime = 0;
-        public Taskbar taskbar;
 
         public Color desktopBackground;
 
@@ -40,10 +38,6 @@ namespace Arx.Sys.GUI
 
             windows = new List<Window.Window>();
             mouse = new Mouse(Kernel.cursorBitmap, Width, Height);
-
-            windows.Add(new Window.Window(25, 25, 300, 300, "Balls"));
-            
-            taskbar = new Taskbar(Color.Gray);
         }
 
         public void Render()
@@ -69,8 +63,6 @@ namespace Arx.Sys.GUI
                     }
                 }
             }
-
-            taskbar.Render();
 
             mouse.Render();
             mouse.ChangeCursor(Kernel.cursorBitmap);

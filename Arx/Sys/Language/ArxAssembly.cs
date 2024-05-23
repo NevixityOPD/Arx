@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Arx.Sys.Stdio;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -6,88 +7,81 @@ namespace Arx.Sys.Language
 {
     public class ArxAssembly
     {
-        private struct Label
-        {
-            public string labelName;
-            public int line;
-        }
+        byte[] stack = null!;
+        int ptr = 0;
 
-        private Stack<int> stack;
-        private List<Label> labels;
-        private int? poppedData = null!;
-
-        public ArxAssembly()
+        public void interpretCode(string[] code)
         {
-            stack = new Stack<int>();
-            labels = new List<Label>();
-        }
+            int line = 1;
 
-        public void Interpret(string[] instruction)
-        {
-            try
+            foreach(var i in code)
             {
-                for (int i = 0; i < instruction.Length; i++)
+                string[] splitString = i.Split(' ');
+
+                if (splitString[0] == "initstack")
                 {
-                    if (string.IsNullOrEmpty(instruction[i])) { continue; }
-                    else if (instruction[i].Split(' ')[0].ToLower() == "halt")
+                    try
                     {
-                        Thread.Sleep(-100);
+                        stack = new byte[int.Parse(splitString[1])];
                     }
-                    else if (instruction[i].Split(' ')[0].ToLower() == "push")
+                    catch
                     {
-                        stack.Push(int.Parse(instruction[i].Split(' ')[1]));
+                        throwError(line, "cannot init stack");
                     }
-                    else if (instruction[i].Split(' ')[0].ToLower() == "pop")
+                }
+                else if (splitString[0] == "ptr")
+                {
+                    try
                     {
-                        if(poppedData == null!)
+                        if(splitString.Length != 3)
                         {
-                            poppedData = stack.Pop();
-                        }
-                        else
-                        {
-                            Stdio.Write.Println("Instruction Error: Popped data has not been cleared!");
-                            break;
-                        }
-                    }
-                    else if (instruction[i].Split(' ')[0].ToLower() == "clear")
-                    {
-                        poppedData = null!;
-                    }
-                    else if (instruction[i].Split(' ')[0].ToLower() == "jump")
-                    {
-                        foreach(var e in labels)
-                        {
-                            if(e.labelName == instruction[i].Split(' ')[1])
+                            if (splitString[1] == "next")
                             {
-                                i = e.line;
+                                if (ptr + 1 > stack.Length)
+                                {
+                                    throwError(line, "pointer out of bound");
+                                }
+                            }
+                            else if (splitString[1] == "prev")
+                            {
+                                if (ptr - 1 < 0)
+                                {
+                                    throwError(line, "pointer out of bound");
+                                }
+                            }
+                        }
+                        else if (splitString.Length == 3)
+                        {
+                            if (splitString[1] == "next")
+                            {
+                                if (ptr + int.Parse(splitString[2]) > stack.Length)
+                                {
+                                    throwError(line, "pointer out of bound");
+                                }
+                            }
+                            else if (splitString[1] == "prev")
+                            {
+                                if (ptr - int.Parse(splitString[2]) < 0)
+                                {
+                                    throwError(line, "pointer out of bound");
+                                }
                             }
                         }
                     }
-                    else if (instruction[i].Split(' ')[0].ToLower() == "print")
+                    catch
                     {
-                        Stdio.Write.Println(poppedData.ToString());
+                        throwError(line, "exception occured");
                     }
-                    else if (instruction[i].Split(' ')[0].ToLower() == "ascp")
-                    {
-                        Stdio.Write.Println($"{(char)poppedData}");
-                    }
-                    else if (instruction[i].EndsWith(':'))
-                    {
-                        labels.Add(new Label()
-                        {
-                            line = i,
-                            labelName = instruction[i].Replace(":", ""),
-                        });
-                    }   
                 }
 
-                stack = new Stack<int>();
-                poppedData = null!;
+                line++;
             }
-            catch (Exception ex)
-            {
-                Stdio.Write.Println("Exception: " + ex.ToString(), ConsoleColor.Red);
-            }
+        }
+
+        private void throwError(int line, string reason)
+        {
+            Write.Println("ERROR OCCURED!", ConsoleColor.Red);
+            Write.Println($"Line {line}: {reason}\n", ConsoleColor.Red);
         }
     }
 }
